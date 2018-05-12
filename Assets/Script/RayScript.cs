@@ -15,9 +15,22 @@ public class RayScript : MonoBehaviour {
     public GameObject player;
     public GameObject waterPrefab;
 
+    public GameObject photoBubble;
+    public GameObject weHaveBubble;
+    public GameObject someGoodBubble;
+    public GameObject residentsBubble;
+    public GameObject iDontNeedBubble;
+    public GameObject iShouldBubble;
+
+    public GameObject foyerDoor1;
+
     public Vector2 playerPos;
 
     public float conjureTimer = 5;
+
+    public float newsRead = 0;
+  
+
 
     // Use this for initialization
     // void Start () {
@@ -43,7 +56,7 @@ public class RayScript : MonoBehaviour {
         {
             //Debug.Log(hitInfo.collider);
             Renderer hitRenderer = hit.collider.GetComponent<Renderer>();
-            hitRenderer.material.color = Color.red;
+            hitRenderer.material.color = Color.blue;
 
             if (currentHighlightedObject != hitRenderer && currentHighlightedObject != null)
             {
@@ -98,6 +111,50 @@ public class RayScript : MonoBehaviour {
                     }
 
                 }
+
+                if (hit.collider.gameObject.name == "famfoto") {
+                    photoBubble.SetActive(true);
+                }
+
+                if (hit.collider.gameObject.name == "bedroomDoor")
+                {
+                    iDontNeedBubble.SetActive(true);
+                }
+
+                if (hit.collider.gameObject.name == "foyerDoor1" && newsRead == 0)
+                {
+                    iShouldBubble.SetActive(true);
+
+                }
+
+                if (hit.collider.gameObject.name == "news") {
+
+                    newsRead++;
+
+                    if (newsRead == 1)
+                    {
+                        weHaveBubble.SetActive(true);
+
+                        foyerDoor1.GetComponent<BoxCollider2D>().enabled = false;
+
+
+                    }
+
+                    if (newsRead == 2)
+                    {
+                        someGoodBubble.SetActive(true);
+                       
+
+                    }
+
+                    if (newsRead == 3) {
+
+                        residentsBubble.SetActive(true);
+                        newsRead = 0;
+                    }
+
+                }
+
 
             }
 

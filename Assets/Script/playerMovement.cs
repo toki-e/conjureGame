@@ -15,6 +15,8 @@ public class playerMovement : MonoBehaviour
 
     public float moveSpeed = 10f;
     public float jumpForce = 100f;
+    public float jumpTimer = 2f;
+    public float downForce = 5f;
 
     public GameObject conjureMenuPrefab;
     public GameObject cubePrefab;
@@ -23,11 +25,14 @@ public class playerMovement : MonoBehaviour
 
     public bool menuActive; //= false;
     public bool onGround;
+    public bool isFalling;
+    public bool isRunning;
     // public bool canOpenMenu = true;
 
     Rigidbody2D rb;
     Animator anim;
     SpriteRenderer sprite;
+    Vector2 fallValue;
 
 
     // Use this for initialization
@@ -36,6 +41,8 @@ public class playerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         sprite = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
+
+        fallValue = new Vector2 (0, -2);
         //conjureMenuPrefab.SetActive(false);
     }
 
@@ -45,27 +52,69 @@ public class playerMovement : MonoBehaviour
 
         //binding xSpeed to velocity?
         float xSpeed = 0;
-        anim.SetBool("still", true);
-        anim.SetBool("running", false);
+
+        /*if (xSpeed == 0)
+        {
+            anim.SetBool("still", true);
+            anim.SetBool("running", false);
+            anim.SetBool("falling", false);
+        }*/
+
+        if (rb.velocity.x == 0 && rb.velocity.y == 0 && onGround) {
+            anim.SetBool("still", true);
+            anim.SetBool("running", false);
+            anim.SetBool("falling", false);
+        }
+
+
+        //jumpTimer -= Time.deltaTime;
+        //anim.SetBool("jumping", false);
+
+        if (onGround)
+        {
+            isFalling = false;
+            anim.SetBool("falling", false);
+        }
+        else {
+            isFalling = true;
+        }
+
+        if (isFalling) {
+            onGround = false;
+        }
 
         if (Input.GetKey(rightKey))
         {
             xSpeed += moveSpeed;
             sprite.flipX = false;
-            anim.SetBool("running", true);
-            anim.SetBool("still", false);
+            isRunning = true;
+
+            if (onGround)
+            {
+                anim.SetBool("running", true);
+                anim.SetBool("still", false);
+                anim.SetBool("jumping", false);
+            }
+
         }
-     
+
 
         if (Input.GetKey(leftKey))
         {
             xSpeed -= moveSpeed;
             sprite.flipX = true;
-            anim.SetBool("running", true);
-            anim.SetBool("still", false);
+            isRunning = true;
+            //anim.SetBool("still", false);
+
+            if (onGround)
+            {
+                anim.SetBool("running", true);
+                anim.SetBool("still", false);
+                anim.SetBool("jumping", false);
+            }
         }
-       
-      
+
+
         rb.velocity = new Vector2(xSpeed, rb.velocity.y);  //don't move this up it won't work
 
         /*if (xSpeed <= 0) {
@@ -85,7 +134,8 @@ public class playerMovement : MonoBehaviour
             //conjureMenuPrefab.SetActive(true);
             Debug.Log("activating");
 
-        } else if (Input.GetKeyUp(menuKey) || Input.GetMouseButtonUp(1))
+        }
+        else if (Input.GetKeyUp(menuKey) || Input.GetMouseButtonUp(1))
         {
             menuActive = false;
             //canOpenMenu = true;
@@ -97,20 +147,81 @@ public class playerMovement : MonoBehaviour
             conjureMenuPrefab.SetActive(true);
             //Instantiate(conjureMenuPrefab, gameObject.transform.position, Quaternion.identity);
         }
-        else if (menuActive == false) {
+        else if (menuActive == false)
+        {
             conjureMenuPrefab.SetActive(false);
         }
 
-        if (onGround && Input.GetKeyDown(jumpKey))
+        /* if (onGround && Input.GetKeyDown(jumpKey))
+         {
+             rb.AddForce(Vector2.up * jumpForce);
+             onGround = false;
+             anim.SetBool("jumping", true);
+             anim.SetBool("still", false);
+             anim.SetBool("running", false);
+         }*/
+
+        jumpTimer -= Time.deltaTime;
+
+        //fix this makes still glitch between running frames
+        if (onGround && jumpTimer <= 0)
         {
-            rb.AddForce(Vector2.up * jumpForce);
-            onGround = false;
+            /*anim.SetBool("still", true);
+            anim.SetBool("running", false);*/
+            anim.SetBool("jumping", false);
+
+           /* if (isRunning == true) {
+                anim.SetBool("still", false);
+                anim.SetBool("running", true);
+                anim.SetBool("jumping", false);
+            }*/
+
+            jumpTimer = 1f;
         }
 
-        if (onGround && Input.GetKeyDown(upKey))
+        if (onGround && Input.GetKeyDown(upKey) || onGround && Input.GetKeyDown(jumpKey))
         {
             rb.AddForce(Vector2.up * jumpForce);
             onGround = false;
+            jumpTimer = 1f;
+            anim.SetBool("jumping", true);
+
+        }
+
+        if (Input.GetKeyDown(jumpKey) || Input.GetKeyDown(upKey))
+        {
+            anim.SetBool("jumping", true);
+            anim.SetBool("still", false);
+            anim.SetBool("running", false);
+        }
+
+        if (rb.velocity.y < 0.2f) {
+
+            if (jumpTimer <= 0)
+            {
+                isFalling = true;
+
+                if (isFalling)
+                {
+                    anim.SetBool("falling", true);
+                    rb.AddForce(Vector2.down * downForce);
+
+                    anim.SetBool("jumping", false);
+                    anim.SetBool("still", false);
+                    anim.SetBool("running", false);
+                }
+                else if (isFalling == false) {
+
+                    anim.SetBool("still", true);
+
+                    anim.SetBool("falling", false);
+                    anim.SetBool("running", false);
+                    anim.SetBool("jumping", false);
+                    
+                }
+
+            }
+
         }
 
     }
@@ -121,7 +232,7 @@ public class playerMovement : MonoBehaviour
 
         foreach (ContactPoint2D contact in collisionInfo.contacts)
         {
-            if (contact.point.y <= (transform.position.y - sprite.bounds.extents.y + 0.5f)
+            if (contact.point.y <= (transform.position.y - sprite.bounds.extents.y + 1f)
                 && Mathf.Abs(contact.point.x - transform.position.x) <= sprite.bounds.extents.x - 0.1f)
             {
                 groundCollision = true;
@@ -131,6 +242,7 @@ public class playerMovement : MonoBehaviour
         if (groundCollision)
         {
             onGround = true;
+            isFalling = false;
         }
     }
 
