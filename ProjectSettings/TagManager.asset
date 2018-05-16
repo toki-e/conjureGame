@@ -6,6 +6,9 @@ TagManager:
   tags:
   - hammer
   - water
+  - sword
+  - hound
+  - enemy
   layers:
   - Default
   - TransparentFX
@@ -40,6 +43,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: sky
+    uniqueID: 2605996301
+    locked: 0
+  - name: BG distance
+    uniqueID: 1445296289
+    locked: 0
   - name: BG
     uniqueID: 2722458565
     locked: 0

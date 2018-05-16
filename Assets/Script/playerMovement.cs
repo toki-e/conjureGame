@@ -60,7 +60,7 @@ public class playerMovement : MonoBehaviour
             anim.SetBool("falling", false);
         }*/
 
-        if (rb.velocity.x == 0 && rb.velocity.y == 0 && onGround) {
+        if (rb.velocity.x == 0 && onGround) {
             anim.SetBool("still", true);
             anim.SetBool("running", false);
             anim.SetBool("falling", false);
@@ -244,6 +244,8 @@ public class playerMovement : MonoBehaviour
             onGround = true;
             isFalling = false;
         }
+
     }
+
 
 }

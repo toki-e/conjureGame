@@ -6,6 +6,7 @@ public class RayScript : MonoBehaviour {
 
     SpriteRenderer sprite;
     SpriteRenderer hammerSprite;
+    Rigidbody2D rBSword;
     Renderer currentHighlightedObject = null;
 
     public GameObject optionCube;
@@ -14,6 +15,7 @@ public class RayScript : MonoBehaviour {
     public GameObject hammerPrefab;
     public GameObject player;
     public GameObject waterPrefab;
+    public GameObject swordPrefab;
 
     public GameObject photoBubble;
     public GameObject weHaveBubble;
@@ -22,13 +24,26 @@ public class RayScript : MonoBehaviour {
     public GameObject iDontNeedBubble;
     public GameObject iShouldBubble;
 
+    public GameObject wellLookBubble;
+    public GameObject iSeeBubble;
+    public GameObject whatsTheLookBubble;
+    public GameObject sureBubble;
+    public GameObject huhBubble;
+    public GameObject itsBaku;
+
+
     public GameObject foyerDoor1;
+    public GameObject exclaim;
+    public GameObject exclaimBaku;
 
     public Vector2 playerPos;
 
     public float conjureTimer = 5;
 
     public float newsRead = 0;
+    public float bakuRead = 0;
+
+    public bool bakuClear = false;
   
 
 
@@ -46,11 +61,12 @@ public class RayScript : MonoBehaviour {
          RaycastHit2D hitInfo;*/
         sprite = player.GetComponent<SpriteRenderer>();
         hammerSprite = hammerPrefab.GetComponent<SpriteRenderer>();
+        rBSword = swordPrefab.GetComponent<Rigidbody2D>();
 
         Vector2 rayPos = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y);
         RaycastHit2D hit = Physics2D.Raycast(rayPos, Vector2.zero, 0f);
         playerPos = player.transform.position;
-        
+             
 
         if (hit)
         {
@@ -112,6 +128,27 @@ public class RayScript : MonoBehaviour {
 
                 }
 
+                if (hit.collider.gameObject.name == "option4")
+                {
+                    Debug.Log("sword");
+                    if (sprite.flipX == false)
+                    {
+
+                        Instantiate(swordPrefab, playerPos + new Vector2(2, 0.5f), Quaternion.identity);
+
+                    }
+
+                    if (sprite.flipX == true)
+                    {
+                        Instantiate(swordPrefab, playerPos + new Vector2(-5, 0.5f), Quaternion.identity);
+                        swordPrefab.transform.rotation = Quaternion.Euler(0, 0, 277f);
+                        rBSword = swordPrefab.GetComponent<Rigidbody2D>();
+                        swordPrefab.GetComponent<Rigidbody2D>().velocity = new Vector2 (-2,0);
+                       // transform.position += Vector3.left * moveSpeedSword * Time.deltaTime;
+                    }
+
+                }
+
                 if (hit.collider.gameObject.name == "famfoto") {
                     photoBubble.SetActive(true);
                 }
@@ -134,7 +171,7 @@ public class RayScript : MonoBehaviour {
                     if (newsRead == 1)
                     {
                         weHaveBubble.SetActive(true);
-
+                        exclaim.SetActive(false);
                         foyerDoor1.GetComponent<BoxCollider2D>().enabled = false;
 
 
@@ -155,6 +192,45 @@ public class RayScript : MonoBehaviour {
 
                 }
 
+                if (hit.collider.gameObject.name == "baku")
+                {
+                    bakuRead++;
+                    
+                    if(bakuRead == 1)
+                    {
+                        wellLookBubble.SetActive(true);
+                        itsBaku.SetActive(true);
+                    }
+
+                    if (bakuRead == 2)
+                    {
+                        iSeeBubble.SetActive(true);
+
+                    }
+
+                    if (bakuRead == 3)
+                    {
+                        whatsTheLookBubble.SetActive(true);
+
+                    }
+
+                    if (bakuRead == 4)
+                    {
+                        sureBubble.SetActive(true);
+
+                    }
+
+                    if (bakuRead == 5) {
+
+                        huhBubble.SetActive(true);
+                        bakuClear = true;
+
+                        bakuRead = 0;
+
+                    }
+
+                }
+
 
             }
 
@@ -165,6 +241,11 @@ public class RayScript : MonoBehaviour {
             currentHighlightedObject = null;
         }
 
+        if(bakuClear == true)
+        {
+            exclaimBaku.SetActive(false);
+            GameObject.Find("gateClosed").SetActive(false);
+        }
 
     }
 }

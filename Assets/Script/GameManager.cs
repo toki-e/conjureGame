@@ -35,7 +35,24 @@ public class GameManager : MonoBehaviour {
 
         mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         petalCursor.transform.position = mousePosition;
-        
 
-	}
+        // -------------------Code for Zooming Out------------
+        if (Input.GetAxis("Mouse ScrollWheel") < 0)
+        {
+            if (Camera.main.fieldOfView <= 125)
+                Camera.main.fieldOfView += 2;
+            if (Camera.main.orthographicSize <= 20)
+                Camera.main.orthographicSize += 0.5f;
+
+        }
+        // ---------------Code for Zooming In------------------------
+        if (Input.GetAxis("Mouse ScrollWheel") > 0)
+        {
+            if (Camera.main.fieldOfView > 2)
+                Camera.main.fieldOfView -= 2;
+            if (Camera.main.orthographicSize >= 11)
+                Camera.main.orthographicSize -= 0.5f;
+        }
+
+    }
 }

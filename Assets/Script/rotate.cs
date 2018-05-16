@@ -43,7 +43,7 @@ public class rotate : MonoBehaviour {
             eulerAngles += rotateAxis * rotateSpeed * Time.deltaTime;
             transform.localRotation = Quaternion.Euler(eulerAngles);
             Quaternion.Inverse(gameObject.transform.localRotation);
-            Debug.Log("flipping");
+            //Debug.Log("flipping");
         }
 
     }

@@ -12,7 +12,16 @@ public class sceneSwitch : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetKeyDown(KeyCode.Space)) {
+        /*if (Input.GetKeyDown(KeyCode.Space)) {
+            SceneManager.LoadScene(1);
+        }*/
+
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            SceneManager.LoadScene(2);
+        }
+
+        if (Input.GetKey(KeyCode.Q)) {
             SceneManager.LoadScene(1);
         }
 	}

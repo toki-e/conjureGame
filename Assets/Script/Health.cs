@@ -64,7 +64,7 @@ public class Health : MonoBehaviour {
             dia5.SetActive(false);
         }
         else if (hp == 0f) {
-            SceneManager.LoadScene(2);
+            SceneManager.LoadScene(3);
             dia1.SetActive(false);
             dia2.SetActive(false);
             dia3.SetActive(false);
@@ -72,4 +72,13 @@ public class Health : MonoBehaviour {
             dia5.SetActive(false);
         }
 	}
+
+    private void OnCollisionEnter2D(Collision2D coll)
+    {
+        if(coll.gameObject.tag == "enemy")
+        {
+            hp--;
+
+        }
+    }
 }

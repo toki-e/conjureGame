@@ -24,9 +24,10 @@ GameObject:
   - component: {fileID: 50251643654156988}
   - component: {fileID: 61214544319102696}
   - component: {fileID: 114199036910927200}
+  - component: {fileID: 114943220103136630}
   m_Layer: 0
   m_Name: enemy
-  m_TagString: Untagged
+  m_TagString: enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -55,7 +56,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1293762015016728}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 29.88, y: -0.58, z: 0}
+  m_LocalPosition: {x: 191.92474, y: -2.1358361, z: 0}
   m_LocalScale: {x: 1.689581, y: 1.6895804, z: 1.68958}
   m_Children:
   - {fileID: 4978834913980008}
@@ -151,6 +152,20 @@ MonoBehaviour:
   fireballPrefab: {fileID: 1544301621695476, guid: b3420fbc1b37d3a49a0525213ea06100,
     type: 2}
   timeToGetLit: 5
+--- !u!114 &114943220103136630
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1293762015016728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29d358e484686be45bc6c0091ee01475, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  swordPrefab: {fileID: 1153236463179326, guid: 0181a6705f6432148b624bcf613e179b,
+    type: 2}
+  enemyHealth: 2
 --- !u!198 &198560435519374806
 ParticleSystem:
   m_ObjectHideFlags: 1

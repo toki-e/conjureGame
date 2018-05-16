@@ -11,6 +11,7 @@ public class timeToAttack : MonoBehaviour {
 
     public float timeToGetLit = 4f;
     Vector2 enemyPos;
+
 	// Use this for initialization
 	void Start () {
 
